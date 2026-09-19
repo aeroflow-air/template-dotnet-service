@@ -1,0 +1,40 @@
+# Local CI for this template (restore → build → test).
+#
+# TODO (Quality Gate): when aeroflow-workflows publishes a reusable build/test
+# workflow, extract this job there and replace the steps below with a
+# workflow_call. Today aeroflow-workflows only ships validate-decisions.yml —
+# do not invent a broken reusable workflow reference.
+#
+# Org GITHUB_TOKEN is read-only; keep job-level permissions explicit and minimal.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore AeroFlow.ServiceTemplate.sln
+
+      - name: Build
+        run: dotnet build AeroFlow.ServiceTemplate.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test AeroFlow.ServiceTemplate.sln --configuration Release --no-build --verbosity normal
