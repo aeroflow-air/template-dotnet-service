@@ -1,8 +1,5 @@
 # Thin caller — real work lives in aeroflow-workflows.
-#
-# TEMP: pin the reusable workflow branch until aeroflow-workflows#2 merges
-# and tag v0.1.0 is cut on main. Then switch the ref to @v0.1.0 and remove
-# this TEMP note.
+# Pin a release tag, never @main.
 #
 # Org GITHUB_TOKEN is read-only by default; keep job-level permissions
 # explicit and minimal on both the caller and the reusable workflow.
@@ -20,7 +17,7 @@ permissions:
 
 jobs:
   build-and-test:
-    uses: aeroflow-air/aeroflow-workflows/.github/workflows/dotnet-ci.yml@quality-gate/dotnet-ci
+    uses: aeroflow-air/aeroflow-workflows/.github/workflows/dotnet-ci.yml@v0.1.0
     with:
       solution: AeroFlow.ServiceTemplate.sln
     permissions:
