@@ -49,20 +49,18 @@ Then `curl http://localhost:8080/health`.
 - **No Pulumi** (or other IaC frameworks in-repo yet)
 - **No heavy shared framework** NuGet — composition stays in `Program.cs` so squads can delete or replace pieces freely
 
-Infrastructure as Bicep/AVM will land under [`infra/`](infra/README.md) later. Platform conventions live in the **platform-handbook**; reusable Actions will come from **aeroflow-workflows**.
+Infrastructure as Bicep/AVM will land under [`infra/`](infra/README.md) later. Platform conventions live in the **platform-handbook**; reusable Actions come from **aeroflow-workflows**.
 
 ## CI
 
-This repository ships a **local** GitHub Actions workflow (`.github/workflows/ci.yml`) that restores, builds, and tests on every push and pull request. Job-level `permissions` are explicit because the organisation `GITHUB_TOKEN` is read-only by default.
-
-> **TODO (Quality Gate):** when `aeroflow-workflows` publishes a reusable build/test workflow, extract this job into that repo and call it from here. Today `aeroflow-workflows` only has `validate-decisions.yml` — do **not** invent a broken `workflow_call` reference.
+`.github/workflows/ci.yml` calls the reusable workflow in `aeroflow-workflows` (`dotnet-ci.yml`, pinned to `@v0.1.0`), which restores, builds, and tests on pushes to `main` and on pull requests. Job-level `permissions` are explicit because the organisation `GITHUB_TOKEN` is read-only by default.
 
 ## Pointers
 
 | Resource | Purpose |
 | --- | --- |
 | platform-handbook | Portfolio standards, CLAUDE.md constraints, ADR process |
-| aeroflow-workflows | Shared GitHub Actions (decisions validation today; build/test later) |
+| aeroflow-workflows | Shared GitHub Actions (dotnet-ci and decisions validation) |
 | `infra/` | Placeholder for Bicep/AVM — see `infra/README.md` |
 
 ## Licence / ownership
