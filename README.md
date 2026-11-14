@@ -14,7 +14,7 @@ cd svc-booking
 # Rename solution, project folders, namespaces, and Docker image tags to match the service
 ```
 
-Keep the layout: `src/`, `tests/`, `Dockerfile`, and `.github/workflows/ci.yml`. Rename `AeroFlow.ServiceTemplate` to your service name throughout.
+Keep the layout: `src/`, `tests/`, `Dockerfile`, `.github/workflows/ci.yml`, and `.github/workflows/workload.yml`. Rename `AeroFlow.ServiceTemplate` to your service name throughout, and set `workload` and `repo` in `workload.yaml` to the new service name (for example `svc-booking`).
 
 ## Local run
 
@@ -53,7 +53,7 @@ Infrastructure as Bicep will land under [`infra/`](infra/README.md) later, using
 
 ## CI
 
-`.github/workflows/ci.yml` calls the reusable workflow in `aeroflow-workflows` (`dotnet-ci.yml`, pinned to `@v0.5.0`), which restores, builds, and tests on pushes to `main` and on pull requests. Job-level `permissions` are explicit because the organisation `GITHUB_TOKEN` is read-only by default.
+`.github/workflows/ci.yml` calls the reusable workflow in `aeroflow-workflows` (`dotnet-ci.yml`, pinned to `@v0.5.0`), which restores, builds, and tests on pushes to `main` and on pull requests. `.github/workflows/workload.yml` calls `workload-deploy.yml` at the same pin: it validates `workload.yaml`, generates Bicep, and runs PSRule for Azure. The workflow file itself has no service name in it, so a newly scaffolded service only needs to rename the `workload` and `repo` fields in `workload.yaml`. Job-level `permissions` are explicit because the organisation `GITHUB_TOKEN` is read-only by default.
 
 ## Pointers
 
