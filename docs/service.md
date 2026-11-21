@@ -30,7 +30,7 @@ services).
 
 | Decision | Why | Link |
 | --- | --- | --- |
-| | | |
+| Observability is on by default via `AeroFlow.ServiceDefaults` | Golden-path traces, metrics, health and standard logs, without each service wiring exporters | [ADR-0022](https://github.com/aeroflow-air/platform-handbook/blob/main/docs/decisions/0022-observability-on-the-golden-path.md), [docs/service-defaults.md](service-defaults.md) |
 
 ## Architecture
 
@@ -59,7 +59,10 @@ Contract source (shared package or local copy, and which upstream type).
 
 | Setting | Default | Meaning |
 | --- | --- | --- |
-| | | |
+| `Observability:ServiceName` | Host application name | `service.name` on every signal |
+| `Observability:ServiceVersion` | Entry assembly informational version | `service.version` |
+| `Observability:Environment` | Host environment name | `deployment.environment` |
+| `Observability:Squad` | `unknown` | `aeroflow.squad` — set this |
 
 ## Outputs
 
@@ -94,10 +97,10 @@ Delivery semantics: at-least-once? idempotent? what is dead-lettered and why?
 
 ## Running and testing
 
-- Standalone: `dotnet run ...`, which endpoints to hit.
-- With the airport: aeroflow-local AppHost steps.
-- Tests: `dotnet test`, and what the suites cover.
-- What to look for in logs to know it is working.
+- Standalone: `dotnet run --project src/AeroFlow.ServiceTemplate`. Hit `GET /health`, `GET /alive`, `GET /api/bookings/ping`.
+- With the airport: not wired into aeroflow-local (this is the template, not a live service).
+- Tests: `dotnet test`. Includes a contract test that asserts platform request logs carry the required fields.
+- Healthy logs: an `AeroFlow.ServiceDefaults` event 1000 for each API request, plus business event 10000 on `/api/bookings/ping`. Health probes are not request-logged.
 
 ## Known gaps
 

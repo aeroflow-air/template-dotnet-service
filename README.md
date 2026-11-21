@@ -2,7 +2,7 @@
 
 Golden-path ASP.NET Core Web API template for the [AeroFlow Air](https://github.com/aeroflow-air) portfolio. Squads of roughly six use this to spin up `svc-*` repositories with a thin, containerised starting point — health checks, structured logging, ProblemDetails, and OpenTelemetry.
 
-The shared observability package is `AeroFlow.ServiceDefaults` in this repository ([docs/service-defaults.md](docs/service-defaults.md), [ADR-0022](https://github.com/aeroflow-air/platform-handbook/blob/main/docs/decisions/0022-observability-on-the-golden-path.md)). The template service is not yet switched over to `AddServiceDefaults()`; that is a follow-up. Until a `lib-service-defaults` repo and GitHub Packages feed exist, consume the package as a project reference.
+The shared observability package is `AeroFlow.ServiceDefaults` in this repository ([docs/service-defaults.md](docs/service-defaults.md), [ADR-0022](https://github.com/aeroflow-air/platform-handbook/blob/main/docs/decisions/0022-observability-on-the-golden-path.md)). The template service calls `AddServiceDefaults()` and `MapDefaultEndpoints()`. Until a `lib-service-defaults` repo and GitHub Packages feed exist, consume the package as a project reference.
 
 ## Create a new service from this template
 
@@ -28,7 +28,7 @@ dotnet run --project src/AeroFlow.ServiceTemplate
 ```
 
 - API: `http://localhost:8080` (or the port shown in the console)
-- Health: `GET /health`
+- Health: `GET /health` (readiness) and `GET /alive` (liveness)
 - Demo booking probe: `GET /api/bookings/ping` and `GET /api/bookings/{id}` (unknown ids return ProblemDetails)
 
 ```bash

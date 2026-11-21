@@ -4,7 +4,7 @@ Status: the package lives in this repository at `src/AeroFlow.ServiceDefaults` (
 
 This is the golden-path observability package, promoted from `AeroFlow.Local.ServiceDefaults` in aeroflow-local. There is no `lib-*` repo and no NuGet feed in the organisation yet, so the package is housed here — the place ADR-0014 already pointed to ("until published from the template"). The recommended long-term home is a new `lib-service-defaults` repository that publishes `AeroFlow.ServiceDefaults` and `AeroFlow.ServiceDefaults.Testing` to GitHub Packages. This record does not create that repo.
 
-The template service itself is not switched over in the package PR; a follow-up adopts `AddServiceDefaults()` in `Program.cs`. Existing `svc-*` services are a later follow-up.
+The template service calls `AddServiceDefaults()` in `Program.cs`. Existing `svc-*` services are a later follow-up.
 
 ## What the package emits
 
