@@ -1,0 +1,4 @@
+<Project>
+  <!-- Flow analyser defaults to PackageReference consumers. -->
+  <Import Project="..\build\AeroFlow.ServiceDefaults.props" />
+</Project>

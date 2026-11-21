@@ -1,6 +1,8 @@
 # AeroFlow .NET service template
 
-Golden-path ASP.NET Core Web API template for the [AeroFlow Air](https://github.com/aeroflow-air) portfolio. Squads of roughly six use this to spin up `svc-*` repositories with a thin, containerised starting point — health checks, structured logging, ProblemDetails, and a stub for OpenTelemetry — without a shared framework package.
+Golden-path ASP.NET Core Web API template for the [AeroFlow Air](https://github.com/aeroflow-air) portfolio. Squads of roughly six use this to spin up `svc-*` repositories with a thin, containerised starting point — health checks, structured logging, ProblemDetails, and OpenTelemetry.
+
+The shared observability package is `AeroFlow.ServiceDefaults` in this repository ([docs/service-defaults.md](docs/service-defaults.md), [ADR-0022](https://github.com/aeroflow-air/platform-handbook/blob/main/docs/decisions/0022-observability-on-the-golden-path.md)). The template service is not yet switched over to `AddServiceDefaults()`; that is a follow-up. Until a `lib-service-defaults` repo and GitHub Packages feed exist, consume the package as a project reference.
 
 ## Create a new service from this template
 
@@ -47,7 +49,7 @@ Then `curl http://localhost:8080/health`.
 - **No Kubernetes** manifests or Helm charts
 - **No Dagger** pipelines
 - **No Pulumi** (or other IaC frameworks in-repo yet)
-- **No heavy shared framework** NuGet — composition stays in `Program.cs` so squads can delete or replace pieces freely
+- **No heavy shared framework.** `AeroFlow.ServiceDefaults` is a small, independently versioned library for observability (ADR-0022). A squad can delete it and still ship, provided it still meets the signal and context-propagation contract.
 
 Infrastructure as Bicep will land under [`infra/`](infra/README.md) later, using only governed platform modules (`br/platform:*`); see [ADR-0006](https://github.com/aeroflow-air/platform-handbook/blob/main/docs/decisions/0006-governed-bicep-modules-only.md). Platform conventions live in the **platform-handbook**; reusable Actions come from **aeroflow-workflows**.
 
@@ -62,6 +64,7 @@ Infrastructure as Bicep will land under [`infra/`](infra/README.md) later, using
 | platform-handbook | Portfolio standards, CLAUDE.md constraints, ADR process |
 | aeroflow-workflows | Shared GitHub Actions (dotnet-ci and decisions validation) |
 | `infra/` | Placeholder for Bicep (governed `br/platform:*` modules only, see [ADR-0006](https://github.com/aeroflow-air/platform-handbook/blob/main/docs/decisions/0006-governed-bicep-modules-only.md)) — see `infra/README.md` |
+| [docs/service-defaults.md](docs/service-defaults.md) | Observability package: event catalogue, log fields, analyser rules, contract-test helper |
 
 ## Licence / ownership
 

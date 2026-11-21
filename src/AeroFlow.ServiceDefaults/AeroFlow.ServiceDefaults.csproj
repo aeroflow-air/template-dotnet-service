@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>AeroFlow.ServiceDefaults</RootNamespace>
+    <AssemblyName>AeroFlow.ServiceDefaults</AssemblyName>
+    <Description>Golden-path OpenTelemetry, health checks, structured platform logs and logging analysers for AeroFlow services (ADR-0022).</Description>
+    <PackageId>AeroFlow.ServiceDefaults</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>AeroFlow</Authors>
+    <PackageTags>aeroflow;opentelemetry;logging;observability</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/aeroflow-air/template-dotnet-service</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IsPackable>true</IsPackable>
+    <IsAspireSharedProject>true</IsAspireSharedProject>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.6.0" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="9.9.0" />
+    <PackageReference Include="Microsoft.Extensions.ServiceDiscovery" Version="9.5.2" />
+    <!-- Exporter >= 1.15.3 required for GHSA-4625-4j76-fww9; pin matches aeroflow-local. -->
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.19.1" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.19.1" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.19.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.19.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.19.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="build\AeroFlow.ServiceDefaults.props" Pack="true" PackagePath="build\" />
+    <None Include="build\BannedSymbols.txt" Pack="true" PackagePath="build\" />
+    <None Include="buildTransitive\AeroFlow.ServiceDefaults.props" Pack="true" PackagePath="buildTransitive\" />
+  </ItemGroup>
+
+</Project>
