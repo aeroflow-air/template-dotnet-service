@@ -1,0 +1,4 @@
+# Use ILogger and [LoggerMessage] instead of writing to the console (ADR-0022).
+T:System.Console;Use ILogger and [LoggerMessage] instead of System.Console.
+M:System.Diagnostics.Debug.WriteLine(System.String);Use ILogger and [LoggerMessage] instead of Debug.WriteLine.
+M:System.Diagnostics.Debug.WriteLine(System.String,System.Object[]);Use ILogger and [LoggerMessage] instead of Debug.WriteLine.

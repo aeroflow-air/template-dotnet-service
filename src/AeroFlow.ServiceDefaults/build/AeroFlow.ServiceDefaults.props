@@ -1,0 +1,15 @@
+<Project>
+  <!--
+    Analyser defaults shipped with AeroFlow.ServiceDefaults (ADR-0022).
+    Consuming projects get these via this file (same-repo import or the NuGet
+    build / buildTransitive folder). CA1848 / CA2254 come from the SDK analysers.
+  -->
+  <PropertyGroup>
+    <WarningsAsErrors>$(WarningsAsErrors);CA1848;CA2254;RS0030</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.3.4" PrivateAssets="all" />
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt" />
+  </ItemGroup>
+</Project>

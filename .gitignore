@@ -2,6 +2,9 @@
 bin/
 obj/
 [Bb]uild/
+# Keep the NuGet/MSBuild pack folder for AeroFlow.ServiceDefaults.
+!src/AeroFlow.ServiceDefaults/build/
+!src/AeroFlow.ServiceDefaults/build/**
 [Ll]og/
 [Ll]ogs/
 *.user
