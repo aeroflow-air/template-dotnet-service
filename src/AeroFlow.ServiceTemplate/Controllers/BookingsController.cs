@@ -5,8 +5,10 @@ namespace AeroFlow.ServiceTemplate.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class BookingsController : ControllerBase
+public sealed class BookingsController(ILogger<BookingsController> logger) : ControllerBase
 {
+    private readonly ILogger _logger = logger;
+
     // Tiny in-memory demo data — replace with real persistence in svc-* repos.
     private static readonly IReadOnlyDictionary<string, BookingSummary> DemoBookings =
         new Dictionary<string, BookingSummary>(StringComparer.OrdinalIgnoreCase)
@@ -20,6 +22,7 @@ public sealed class BookingsController : ControllerBase
     [ProducesResponseType(typeof(BookingPingResponse), StatusCodes.Status200OK)]
     public ActionResult<BookingPingResponse> Ping()
     {
+        BookingLog.Ping(_logger);
         return Ok(new BookingPingResponse(
             Service: "AeroFlow.ServiceTemplate",
             Message: "Booking probe OK",
@@ -37,6 +40,7 @@ public sealed class BookingsController : ControllerBase
     {
         if (!DemoBookings.TryGetValue(id, out var booking))
         {
+            BookingLog.BookingNotFound(_logger, id);
             return NotFound(new ProblemDetails
             {
                 Title = "Booking not found",
@@ -46,6 +50,7 @@ public sealed class BookingsController : ControllerBase
             });
         }
 
+        BookingLog.BookingLookedUp(_logger, booking.Id, booking.FlightNumber);
         return Ok(booking);
     }
 }

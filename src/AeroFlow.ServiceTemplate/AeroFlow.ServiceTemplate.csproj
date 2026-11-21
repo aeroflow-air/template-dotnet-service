@@ -5,4 +5,8 @@
     <AssemblyName>AeroFlow.ServiceTemplate</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../AeroFlow.ServiceDefaults/AeroFlow.ServiceDefaults.csproj" />
+  </ItemGroup>
+
 </Project>

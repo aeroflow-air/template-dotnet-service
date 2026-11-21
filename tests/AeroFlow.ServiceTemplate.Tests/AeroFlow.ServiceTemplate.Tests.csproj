@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AeroFlow.ServiceTemplate\AeroFlow.ServiceTemplate.csproj" />
+    <ProjectReference Include="..\..\src\AeroFlow.ServiceDefaults.Testing\AeroFlow.ServiceDefaults.Testing.csproj" />
   </ItemGroup>
 
 </Project>
