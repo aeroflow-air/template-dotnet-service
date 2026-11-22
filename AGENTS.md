@@ -1,14 +1,16 @@
 # template-dotnet-service
 
 Golden-path template for AeroFlow .NET 8 services. New `svc-*` repos are created from it
-(skill `aeroflow-new-service-checklist`). `BookingsController`, `Models/` and `BookingLog` are placeholders.
+(skill `aeroflow-new-service-checklist`). `BookingsController`, `Models/`, `Domain/` and `BookingLog` are placeholders.
 When you create a service from it, rewrite this file for that service's domain and topics.
 
 ## Non-negotiables (* = enforced by build or CI)
 - The HTTP edge is `[ApiController]` controllers in `Controllers/`, not minimal APIs.
 - The domain is pure (ADR-0004, [coding standards](https://github.com/aeroflow-air/platform-handbook/blob/main/docs/standards/coding-standards.md)):
   static functions, immutable `sealed record`s, `Result<T>` with typed errors, `Option<T>` instead of `null`.
-  No I/O, logging, clock or `throw` for business rules. The template has no `Domain/` yet, so copy svc-gate-allocation.
+  * `DomainPurityTests`: nothing in `Domain/` uses logging, I/O, HTTP, data access, Microsoft.Extensions/ASP.NET,
+  ServiceDefaults, other layers, `TimeProvider` or `DateTime(Offset).Now`. Pass `now` in. Review-only: `throw`,
+  `null`, `Guid.NewGuid`/`Random`. For `Result`/`Option`, copy svc-gate-allocation's `Domain/`.
 - Errors leave as ProblemDetails 400/404/409 with a `code` extension. Follow gate-allocation's `ProblemResults.cs`.
   The demo's inline `NotFound(new ProblemDetails ...)` is a placeholder.
 - * `AddServiceDefaults()` + `MapDefaultEndpoints()` give OTel, request logs, `/health` (readiness) and `/alive`
@@ -35,4 +37,4 @@ docker build -t aeroflow-service-template .
 ## Skills
 Task skills are plain Markdown in `.claude/skills/<name>/SKILL.md`, pinned in `.agent-skills.yaml`. Any agent can
 use them: read each `description`, follow the Steps, and open the Example links. Don't edit `aeroflow-*` folders
-(* CI drift check). Change them in [agent-skills](https://github.com/aeroflow-air/agent-skills) instead.
+(* CI drift check; CODEOWNERS: @aeroflow-air/platform). Change them in [agent-skills](https://github.com/aeroflow-air/agent-skills).
