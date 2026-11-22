@@ -42,6 +42,11 @@ namespace AeroFlow.ServiceTemplate.Tests.Architecture.Fixtures.Domain
         public Messaging.Outbox Outbox { get; } = outbox;
     }
 
+    public sealed class UsesStorageLayer(Storage.PlanStore store)
+    {
+        public Storage.PlanStore Store { get; } = store;
+    }
+
     public sealed class UsesTimeProvider(TimeProvider clock)
     {
         public DateTimeOffset Now => clock.GetUtcNow();
@@ -67,4 +72,9 @@ namespace AeroFlow.ServiceTemplate.Tests.Architecture.Fixtures.Domain
 namespace AeroFlow.ServiceTemplate.Tests.Architecture.Fixtures.Messaging
 {
     public sealed class Outbox;
+}
+
+namespace AeroFlow.ServiceTemplate.Tests.Architecture.Fixtures.Storage
+{
+    public sealed class PlanStore;
 }

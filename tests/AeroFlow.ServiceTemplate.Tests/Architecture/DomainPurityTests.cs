@@ -36,6 +36,7 @@ public sealed class DomainPurityTests
     [InlineData("hosting, DI, options and configuration", "UsesOptions")]
     [InlineData("ServiceDefaults", "UsesServiceDefaults")]
     [InlineData("service layers outside the domain", "UsesMessagingLayer")]
+    [InlineData("service layers outside the domain", "UsesStorageLayer")]
     [InlineData("injected clock (pass now in as a value)", "UsesTimeProvider")]
     [InlineData("ambient clock (DateTime.Now/UtcNow/Today, DateTimeOffset.Now/UtcNow)", "ReadsUtcNow")]
     [InlineData("ambient clock (DateTime.Now/UtcNow/Today, DateTimeOffset.Now/UtcNow)", "ReadsClockInLambda")]
