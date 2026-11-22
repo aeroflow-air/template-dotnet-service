@@ -3,15 +3,24 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
+COPY nuget.config ./
 COPY Directory.Build.props ./
-COPY src/AeroFlow.ServiceDefaults/AeroFlow.ServiceDefaults.csproj src/AeroFlow.ServiceDefaults/
-COPY src/AeroFlow.ServiceDefaults/build/ src/AeroFlow.ServiceDefaults/build/
-COPY src/AeroFlow.ServiceDefaults/buildTransitive/ src/AeroFlow.ServiceDefaults/buildTransitive/
 COPY src/AeroFlow.ServiceTemplate/AeroFlow.ServiceTemplate.csproj src/AeroFlow.ServiceTemplate/
 
-RUN dotnet restore src/AeroFlow.ServiceTemplate/AeroFlow.ServiceTemplate.csproj
+# GitHub Packages requires auth even for public packages.
+# docker build --secret id=nuget_auth_token,env=NUGET_AUTH_TOKEN -t aeroflow-service-template .
+# Use a PAT (or GITHUB_TOKEN in CI) with read:packages. The token is applied on
+# a tmpfs copy of nuget.config and is not written into an image layer.
+RUN --mount=type=secret,id=nuget_auth_token \
+    --mount=type=tmpfs,target=/tmp/nuget \
+    cp nuget.config /tmp/nuget/nuget.config \
+    && dotnet nuget update source aeroflow-air \
+         --username USERNAME \
+         --password "$(cat /run/secrets/nuget_auth_token)" \
+         --store-password-in-clear-text \
+         --configfile /tmp/nuget/nuget.config \
+    && dotnet restore src/AeroFlow.ServiceTemplate/AeroFlow.ServiceTemplate.csproj --configfile /tmp/nuget/nuget.config
 
-COPY src/AeroFlow.ServiceDefaults/ src/AeroFlow.ServiceDefaults/
 COPY src/AeroFlow.ServiceTemplate/ src/AeroFlow.ServiceTemplate/
 
 RUN dotnet publish src/AeroFlow.ServiceTemplate/AeroFlow.ServiceTemplate.csproj \

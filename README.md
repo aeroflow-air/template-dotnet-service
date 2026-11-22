@@ -2,7 +2,7 @@
 
 Golden-path ASP.NET Core Web API template for the [AeroFlow Air](https://github.com/aeroflow-air) portfolio. Squads of roughly six use this to spin up `svc-*` repositories with a thin, containerised starting point — health checks, structured logging, ProblemDetails, and OpenTelemetry.
 
-The shared observability package is `AeroFlow.ServiceDefaults` in this repository ([docs/service-defaults.md](docs/service-defaults.md), [ADR-0022](https://github.com/aeroflow-air/platform-handbook/blob/main/docs/decisions/0022-observability-on-the-golden-path.md)). The template service calls `AddServiceDefaults()` and `MapDefaultEndpoints()`. Until a `lib-service-defaults` repo and GitHub Packages feed exist, consume the package as a project reference.
+The shared observability package is [`AeroFlow.ServiceDefaults` 0.1.1](https://github.com/aeroflow-air/lib-service-defaults) from the org GitHub Packages feed ([docs/service-defaults.md](docs/service-defaults.md), [ADR-0022](https://github.com/aeroflow-air/platform-handbook/blob/main/docs/decisions/0022-observability-on-the-golden-path.md)). The template service calls `AddServiceDefaults()` and `MapDefaultEndpoints()`. Analysers (CA1848, CA2254, RS0030) flow from the package.
 
 ## Create a new service from this template
 
@@ -35,10 +35,30 @@ dotnet run --project src/AeroFlow.ServiceTemplate
 dotnet test
 ```
 
+
+## NuGet feed (GitHub Packages)
+
+`AeroFlow.ServiceDefaults` 0.1.1 comes from `https://nuget.pkg.github.com/aeroflow-air/index.json`. GitHub Packages requires authentication even though the org and packages are public. Do not put a token in the committed `nuget.config`.
+
+Create a personal access token with the `read:packages` scope (a classic token, or a fine-grained token with read access to packages in `aeroflow-air`). This repository does not create or store that token. Add the source to your **user-level** NuGet config:
+
+```bash
+dotnet nuget add source https://nuget.pkg.github.com/aeroflow-air/index.json \
+  --name aeroflow-air \
+  --username YOUR_GITHUB_USERNAME \
+  --password YOUR_TOKEN \
+  --store-password-in-clear-text
+```
+
+If the source already exists, update the credentials instead of adding it twice. More detail is in the [lib-service-defaults consume guide](https://github.com/aeroflow-air/lib-service-defaults#consume).
+
+CI calls `aeroflow-workflows` `dotnet-ci.yml@v0.7.0` with `github-packages: true` and job permission `packages: read`.
+
 ## Container
 
 ```bash
-docker build -t aeroflow-service-template .
+export NUGET_AUTH_TOKEN=...   # PAT with read:packages; do not commit this
+docker build --secret id=nuget_auth_token,env=NUGET_AUTH_TOKEN -t aeroflow-service-template .
 docker run --rm -p 8080:8080 aeroflow-service-template
 ```
 
@@ -55,7 +75,7 @@ Infrastructure as Bicep will land under [`infra/`](infra/README.md) later, using
 
 ## CI
 
-`.github/workflows/ci.yml` calls the reusable workflow in `aeroflow-workflows` (`dotnet-ci.yml`, pinned to `@v0.5.0`), which restores, builds, and tests on pushes to `main` and on pull requests. `.github/workflows/workload.yml` calls `workload-deploy.yml` at the same pin: it validates `workload.yaml`, generates Bicep, and runs PSRule for Azure. The workflow file itself has no service name in it, so a newly scaffolded service only needs to rename the `workload` and `repo` fields in `workload.yaml`. Job-level `permissions` are explicit because the organisation `GITHUB_TOKEN` is read-only by default.
+`.github/workflows/ci.yml` calls the reusable workflow in `aeroflow-workflows` (`dotnet-ci.yml@v0.7.0` with `github-packages: true` and `packages: read`), which restores, builds, and tests on pushes to `main` and on pull requests. `.github/workflows/workload.yml` calls `workload-deploy.yml` at `@v0.5.0`: it validates `workload.yaml`, generates Bicep, and runs PSRule for Azure. The workflow file itself has no service name in it, so a newly scaffolded service only needs to rename the `workload` and `repo` fields in `workload.yaml`. Job-level `permissions` are explicit because the organisation `GITHUB_TOKEN` is read-only by default.
 
 ## Pointers
 

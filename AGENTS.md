@@ -19,19 +19,21 @@ When you create a service from it, rewrite this file for that service's domain a
   ids start at 10,000. Ids below that are the platform's. No PII, secrets or bodies in logs.
 - Publish only to your own `<capability>-events` topic, via the outbox. Handlers are idempotent (ADR-0013/0017/0019).
 - * `workload.yaml` (ADR-0009): set `workload`/`repo`, and add `queue` + `events:` when using Service Bus (`workload.yml`).
-- Workflows pin `aeroflow-workflows` tags (never `@main`) and declare job permissions. This repo is on `v0.5.0`,
-  plus `v0.7.0` for agent skills. Moving `dotnet-ci.yml` to `v0.6.0`+ needs `packages: read`.
+- Workflows pin `aeroflow-workflows` tags (never `@main`) and declare job permissions. `dotnet-ci.yml` is on
+  `@v0.7.0` with `github-packages: true` and `packages: read`. Agent skills stay on `v0.7.0`. Other workflows
+  may still be on `@v0.5.0`.
 - Update `docs/service.md` in the same PR when inputs, outputs, settings or failure modes change.
 
-## ServiceDefaults here
-`src/AeroFlow.ServiceDefaults*` is an in-repo copy of [lib-service-defaults](https://github.com/aeroflow-air/lib-service-defaults)
-0.1.0, referenced by `ProjectReference`. `Directory.Build.props` imports its analyser props. Change the library
-upstream, not here. The switch to the GitHub Packages feed is pending.
+## ServiceDefaults
+This template PackageReferences [`AeroFlow.ServiceDefaults`](https://github.com/aeroflow-air/lib-service-defaults)
+(and `.Testing` in the test project) **0.1.1** from the org GitHub Packages feed. CA1848, CA2254 and RS0030
+(`Console` / `Debug.WriteLine`) are build errors from the package. Change the library upstream, not here.
+Local restore needs a `read:packages` PAT in your user-level NuGet config (see the README).
 
 ## Build and test
 ```bash
 dotnet build --configuration Release && dotnet test   # xUnit, WebApplicationFactory, LogCollector
-docker build -t aeroflow-service-template .
+docker build --secret id=nuget_auth_token,env=NUGET_AUTH_TOKEN -t aeroflow-service-template .
 ```
 
 ## Skills

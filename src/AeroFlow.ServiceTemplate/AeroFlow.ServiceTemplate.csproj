@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../AeroFlow.ServiceDefaults/AeroFlow.ServiceDefaults.csproj" />
+    <PackageReference Include="AeroFlow.ServiceDefaults" Version="0.1.1" />
   </ItemGroup>
 
 </Project>

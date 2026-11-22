@@ -8,7 +8,4 @@
     <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
-  <!-- ADR-0022 analyser defaults (CA1848, CA2254, banned System.Console). -->
-  <Import Project="$(MSBuildThisFileDirectory)src/AeroFlow.ServiceDefaults/build/AeroFlow.ServiceDefaults.props"
-          Condition="Exists('$(MSBuildThisFileDirectory)src/AeroFlow.ServiceDefaults/build/AeroFlow.ServiceDefaults.props')" />
 </Project>
