@@ -24,7 +24,7 @@ public static class DomainPurityRules
         ("hosting, DI, options and configuration", ["Microsoft.Extensions", "Microsoft.AspNetCore"]),
         ("ServiceDefaults", ["AeroFlow.ServiceDefaults"]),
         ("service layers outside the domain",
-            [$"{root}.Messaging", $"{root}.Infrastructure", $"{root}.Persistence", $"{root}.Controllers"]),
+            [$"{root}.Messaging", $"{root}.Infrastructure", $"{root}.Persistence", $"{root}.Storage", $"{root}.Controllers"]),
         ("injected clock (pass now in as a value)", ["System.TimeProvider"]),
     ];
 
