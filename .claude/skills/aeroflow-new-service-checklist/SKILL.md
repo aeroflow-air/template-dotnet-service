@@ -24,7 +24,9 @@ license: MIT
    restores ServiceDefaults from the org feed. Keep explicit job-level `permissions`, because the org token is read-only.
 5. **Observability.** Keep `AddServiceDefaults()` + `MapDefaultEndpoints()` and set `Observability:Squad`.
    Don't keep a second copy of the library. Follow `aeroflow-add-otel-tracing` for the package source.
-6. **Replace the demo.** Delete `BookingsController`, `Models/` and `BookingLog`. Build a pure `Domain/`: static
+6. **Replace the demo.** Delete `BookingsController`, `Models/` and `BookingLog`, and replace the placeholder
+   `Domain/CheckInWindow.cs` with real domain code. `DomainPurityTests` fail on an empty domain and match by
+   namespace, so keep `Domain/` non-empty and its namespace `AeroFlow.<Capability>.Domain`. Build it pure: static
    planner/lifecycle functions, `sealed record`s, value types with `Parse`, `Errors.cs`, and a small local
    `Result`/`Option` (BCL only, no LanguageExt). Edges go in `Controllers/`, `Messaging/` and `Storage/`. Copy gate-allocation's shape.
 7. **Config.** Bind options with `AddOptions<XOptions>().BindConfiguration(XOptions.SectionName).ValidateDataAnnotations()
