@@ -1,0 +1,30 @@
+# Backstage catalogue entry for this repo (ADR-0024, platform-handbook#123).
+# Discovered by the aeroflow-air Backstage instance (aeroflow-air/backstage).
+# Domains, Systems and the event-bus Resource live in platform-handbook/catalog/.
+#
+# Creating a service from this template? Change metadata.name, title,
+# description and github.com/project-slug to the new repo in your first PR,
+# set spec.system, and change spec.type from template to service. Otherwise the
+# catalogue sees two entities called template-dotnet-service and rejects one.
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: template-dotnet-service
+  title: .NET service template
+  description: >-
+    Golden-path .NET service template repo: ServiceDefaults, health checks,
+    structured logging, ProblemDetails, Dockerfile, workload.yaml and tests.
+    A GitHub template repository, not a Backstage software template.
+  annotations:
+    github.com/project-slug: aeroflow-air/template-dotnet-service
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - dotnet
+    - golden-path
+spec:
+  type: template
+  lifecycle: experimental
+  owner: group:squad-checkin
+  system: developer-platform
+  dependsOn:
+    - component:lib-service-defaults
